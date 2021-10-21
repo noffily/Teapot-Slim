@@ -1,0 +1,12 @@
+{
+    "name": "noffily/psr7-test-slim",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrey Chepurnoy",
+            "email": "noffily@gmail.com"
+        }
+    ],
+    "require": {}
+}
