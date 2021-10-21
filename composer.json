@@ -8,6 +8,12 @@
             "email": "noffily@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:noffily/psr7-test.git"
+        }
+    ],
     "require": {
         "noffily/psr7-test": "dev-main",
         "slim/slim": "^4.9",
