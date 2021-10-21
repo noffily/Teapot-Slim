@@ -8,5 +8,13 @@
             "email": "noffily@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "noffily/psr7-test": "dev-main",
+        "slim/slim": "^4.9",
+        "slim/http": "^1.2",
+        "slim/psr7": "^1.5"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
 }

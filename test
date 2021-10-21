@@ -1,0 +1,37 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Factory\AppFactory;
+use Noffily\Psr7\Test\Emitter;
+use Slim\Psr7\Factory\ServerRequestFactory;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$app = AppFactory::create();
+$app->addErrorMiddleware(true, true, true);
+$app->get('/', function (ServerRequestInterface $request, ResponseInterface $response) {
+    $response->getBody()->write('<a href="/hello/world">Try /hello/world</a>');
+    return $response;
+});
+$app->get('/hello/{name}', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+    $name = $args['name'];
+    $response->getBody()->write("Hello, $name");
+    return $response;
+});
+
+$emitter = new Emitter(Closure::fromCallable(function (ServerRequestInterface $request) use ($app) {
+    return $app->handle($request);
+}));
+
+$requestFactory = (new ServerRequestFactory())->createServerRequest('GET', '/');
+$response = $emitter($requestFactory);
+$response->getBody()->isSeekable() && $response->getBody()->rewind();
+echo $response->getBody()->getContents() . PHP_EOL;
+$requestFactory = (new ServerRequestFactory())->createServerRequest('GET', '/hello/noffily');
+$response = $emitter($requestFactory);
+$response->getBody()->isSeekable() && $response->getBody()->rewind();
+echo $response->getBody()->getContents() . PHP_EOL;
