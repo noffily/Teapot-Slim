@@ -3,10 +3,10 @@
 
 declare(strict_types=1);
 
+use Noffily\Psr7\Test\{Runner, Emitter};
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
-use Noffily\Psr7\Test\Emitter;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
 require __DIR__ . '/vendor/autoload.php';
@@ -27,11 +27,12 @@ $emitter = new Emitter(Closure::fromCallable(function (ServerRequestInterface $r
     return $app->handle($request);
 }));
 
-$requestFactory = (new ServerRequestFactory())->createServerRequest('GET', '/');
-$response = $emitter($requestFactory);
-$response->getBody()->isSeekable() && $response->getBody()->rewind();
-echo $response->getBody()->getContents() . PHP_EOL;
-$requestFactory = (new ServerRequestFactory())->createServerRequest('GET', '/hello/noffily');
-$response = $emitter($requestFactory);
-$response->getBody()->isSeekable() && $response->getBody()->rewind();
-echo $response->getBody()->getContents() . PHP_EOL;
+$runner = new Runner($emitter);
+$runner->addRequest((new ServerRequestFactory())->createServerRequest('GET', '/'));
+$runner->addRequest((new ServerRequestFactory())->createServerRequest('GET', '/hello/noffily'));
+
+foreach ($runner->execute() as $result) {
+    $response = $result->getResponse();
+    $response->getBody()->isSeekable() && $response->getBody()->rewind();
+    echo $response->getBody()->getContents() . PHP_EOL;
+}
