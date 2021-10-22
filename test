@@ -27,12 +27,30 @@ $emitter = new Emitter(Closure::fromCallable(function (ServerRequestInterface $r
     return $app->handle($request);
 }));
 
-$runner = new Runner($emitter);
-$runner->addRequest((new ServerRequestFactory())->createServerRequest('GET', '/'));
-$runner->addRequest((new ServerRequestFactory())->createServerRequest('GET', '/hello/noffily'));
+class TestCase {
+    public function testHomePage(Runner $runner)
+    {
+        $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
 
-foreach ($runner->execute() as $result) {
-    $response = $result->getResponse();
-    $response->getBody()->isSeekable() && $response->getBody()->rewind();
-    echo $response->getBody()->getContents() . PHP_EOL;
+        $runner->addRequest($request);
+        $result = $runner->execute();
+
+        $result->seeResponseCodeIs(200);
+    }
+
+    public function testHello(Runner $runner)
+    {
+        $request = (new ServerRequestFactory())->createServerRequest('GET', '/hello/noffily');
+
+        $runner->addRequest($request);
+        $result = $runner->execute();
+
+        $result->seeResponseCodeIs(200);
+    }
 }
+
+$testCase = new TestCase();
+$testCase->testHello(new Runner($emitter));
+$testCase->testHomePage(new Runner($emitter));
+
+echo 'done';
