@@ -1,1 +1,1 @@
-# psr7-test-slim
+# Teapot Slim
