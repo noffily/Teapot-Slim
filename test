@@ -36,6 +36,7 @@ class TestCase {
         $result = $runner->execute();
 
         $result->seeResponseCodeIs(200);
+        $result->seeResponseBodyContentsIs('<a href="/hello/world">Try /hello/world</a>');
     }
 
     public function testHello(Runner $runner)
@@ -46,6 +47,7 @@ class TestCase {
         $result = $runner->execute();
 
         $result->seeResponseCodeIs(200);
+        $result->seeResponseBodyContentsIs('Hello, noffily');
     }
 }
 
