@@ -3,7 +3,8 @@
 
 declare(strict_types=1);
 
-use Noffily\Psr7\Test\{Runner, Emitter};
+use Noffily\Teapot\Core\Runner;
+use Noffily\Teapot\Core\Emitter;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
