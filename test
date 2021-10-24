@@ -32,9 +32,7 @@ class TestCase {
     public function testHomePage(Runner $runner)
     {
         $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
-
-        $runner->addRequest($request);
-        $result = $runner->execute();
+        $result = $runner->execute($request);
 
         $result->seeResponseCodeIs(200);
         $result->seeResponseBodyContentsIs('<a href="/hello/world">Try /hello/world</a>');
@@ -43,9 +41,7 @@ class TestCase {
     public function testHello(Runner $runner)
     {
         $request = (new ServerRequestFactory())->createServerRequest('GET', '/hello/noffily');
-
-        $runner->addRequest($request);
-        $result = $runner->execute();
+        $result = $runner->execute($request);
 
         $result->seeResponseCodeIs(200);
         $result->seeResponseBodyContentsIs('Hello, noffily');
