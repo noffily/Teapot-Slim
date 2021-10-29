@@ -28,28 +28,7 @@ $emitter = new Emitter(Closure::fromCallable(function (ServerRequestInterface $r
     return $app->handle($request);
 }));
 
-class TestCase {
-    public function testHomePage(Runner $runner)
-    {
-        $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
-        $result = $runner->execute($request);
+$loader = new \Noffily\Teapot\Core\Loader(__DIR__ . '/Tests');
+$loader->execute(new Runner($emitter));
 
-        $result->seeResponseCodeIs(200);
-        $result->seeResponseBodyContentsIs('<a href="/hello/world">Try /hello/world</a>');
-    }
-
-    public function testHello(Runner $runner)
-    {
-        $request = (new ServerRequestFactory())->createServerRequest('GET', '/hello/noffily');
-        $result = $runner->execute($request);
-
-        $result->seeResponseCodeIs(200);
-        $result->seeResponseBodyContentsIs('Hello, noffily');
-    }
-}
-
-$testCase = new TestCase();
-$testCase->testHello(new Runner($emitter));
-$testCase->testHomePage(new Runner($emitter));
-
-echo 'done';
+echo 'done' . PHP_EOL;
