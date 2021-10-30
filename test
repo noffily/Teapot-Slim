@@ -3,12 +3,13 @@
 
 declare(strict_types=1);
 
-use Noffily\Teapot\Core\Runner;
-use Noffily\Teapot\Core\Emitter;
+use Noffily\Teapot\Core\RequestEmitter;
+use Noffily\Teapot\Core\ResponseEmitter;
+use Noffily\Teapot\Data\Config;
+use Noffily\Teapot\Teapot;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
-use Slim\Psr7\Factory\ServerRequestFactory;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -24,11 +25,11 @@ $app->get('/hello/{name}', function (ServerRequestInterface $request, ResponseIn
     return $response;
 });
 
-$emitter = new Emitter(Closure::fromCallable(function (ServerRequestInterface $request) use ($app) {
+$responseEmitter = new ResponseEmitter(Closure::fromCallable(function (ServerRequestInterface $request) use ($app) {
     return $app->handle($request);
 }));
 
-$loader = new \Noffily\Teapot\Core\Loader(__DIR__ . '/Tests');
-$loader->execute(new Runner($emitter));
+$teapot = new Teapot(new RequestEmitter($responseEmitter), new Config(__DIR__ . '/Tests'));
+$teapot->run();
 
 echo 'done' . PHP_EOL;

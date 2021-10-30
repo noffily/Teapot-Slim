@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Noffily\TeapotSlim\Test;
 
-use Noffily\Teapot\Core\Runner;
+use Noffily\Teapot\Core\RequestEmitter;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
 final class HelloPageTestCase
 {
-    public function seeHelloPage(Runner $runner): void
+    public function seeHelloPage(RequestEmitter $emitter): void
     {
         $request = (new ServerRequestFactory())->createServerRequest('GET', '/hello/noffily');
-        $result = $runner->execute($request);
+        $result = $emitter->run($request);
 
         $result->seeResponseCodeIs(200);
         $result->seeResponseBodyContentsIs('Hello, noffily');
