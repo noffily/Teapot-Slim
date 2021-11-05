@@ -31,5 +31,3 @@ $responseEmitter = new ResponseEmitter(Closure::fromCallable(function (ServerReq
 
 $teapot = new Teapot(new RequestEmitter($responseEmitter), new Config(__DIR__ . '/Tests'));
 $teapot->run();
-
-echo 'done' . PHP_EOL;
